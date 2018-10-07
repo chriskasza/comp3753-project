@@ -30,6 +30,7 @@ Install Python
 ```
 $ pyenv install 3.7.0
 ```
+This will not impact the version of Python that was installed by your Linux distribution. This additional version of Python will be installed in your home directory.
 
 ### Clone the repository (if you haven't already)
 ```
@@ -42,7 +43,15 @@ $ cd comp3753-project
 $ pyenv local 3.7.0
 ```
 
-### Install the packages in the Pipfile
+### Install pipenv
+Pipenv handles package management and virtual environment management per project.
+
+*Ensure the following command is run in the `comp3753-project` directory where we are using Python v3.7.*
+```
+$ pip install pipenv
+```
+
+### Install the packages from the Pipfile
 ```
 $ pipenv install
 ```
