@@ -13,7 +13,7 @@ $ curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installe
 ```
 Edit your shell rc file (e.g. `~/.bashrc`, `~/.zshrc`) and add the following lines:
 ```
-export PATH="/home/kasza/.pyenv/bin:$PATH"
+export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 ```
