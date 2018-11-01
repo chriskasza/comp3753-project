@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/chriskasza/comp3753-project.svg?branch=master)](https://travis-ci.com/chriskasza/comp3753-project)
+
 # comp3753-project
 Final project for COMP 3753. A sentiment analysis tool to predict USA midterm election results using Twitter and Elasticsearch
 
