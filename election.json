@@ -1,0 +1,98 @@
+{
+	"Description" : "2018 November Midterm Results",
+	"position" : [
+		{
+			"id" : 1,
+			"name" : "Senate",
+			"state" : [
+				{
+					"name" : "Arizona",
+					"candidate" : [
+						{
+							"name" : "Kyrsten Sinema",
+							"party" : "D",
+							"vote" : 49.7,
+							"win" : true
+						},
+						{
+							"name" : "Martha McSally",
+							"party" : "R",
+							"vote" : 48.0,
+							"win" : false
+						},
+						{
+							"name" : "Angela Green",
+							"party" : "G",
+							"vote" : 2.4,
+							"win" : false
+						}
+					]
+				},
+				{
+					"name" : "California",
+					"candidate" : [
+						{
+							"name" : "Dianne Feinstein",
+							"party" : "D",
+							"vote" : 54.5,
+							"win" : true
+						},
+						{
+							"name" : "Kevin de Leon",
+							"party" : "D",
+							"vote" : 45.5,
+							"win" : false
+						}
+					]
+				}
+
+
+			]
+		},
+		{
+			"id" : 2,
+			"name" : "House",
+			"state" : [
+				{
+					"name" : "Alabama",
+					"district" : [
+						{
+							"id" : 1,
+							"candidate" : [
+								{
+									"name" : "Bradley Byrne",
+									"party" : "R",
+									"vote" : 63.3,
+									"win" : true
+								},
+								{
+									"name" : "Robert Kennedy",
+									"party" : "D",
+									"vote" : 36.7,
+									"win" : false
+								}
+							] 
+						},
+						{
+							"id" : 2,
+							"candidate" : [
+								{
+									"name" : "Martha Roby",
+									"party" : "R",
+									"vote" : 61.5,
+									"win" : true
+								},
+								{
+									"name" : "Tabith Isner",
+									"party" : "D",
+									"vote" : 61.5,
+									"win" : true 
+								}
+							]
+						}
+					]
+				}
+			]			
+		}
+	]
+}
