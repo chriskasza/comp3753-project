@@ -1,69 +1,64 @@
+import logging
 import json
-from tweepy.streaming import StreamListener
-from tweepy import OAuthHandler
-from tweepy import Stream
-from textblob import TextBlob
+import pprint
 from elasticsearch import Elasticsearch
+from textblob import TextBlob
+from twython import TwythonStreamer
 
-# import twitter keys and tokens
-from config import *
+logging.basicConfig(filename='sentiment_all_tweet_keys.log',level=logging.WARNING)
 
-# create instance of elasticsearch
 es = Elasticsearch()
+es.indices.create(index='tweets-allkeys', ignore=400, body={'settings': {'index.mapping.total_fields.limit': 2000}})
 
+# Create a class that inherits TwythonStreamer
+class MyStreamer(TwythonStreamer):
 
-class TweetStreamListener(StreamListener):
-
-    # on success
-    def on_data(self, data):
-
-        # decode json
-        dict_data = json.loads(data)
+    # Received data
+    def on_success(self, data):
 
         # pass tweet into TextBlob
-        tweet = TextBlob(dict_data["text"])
+        tweet = TextBlob(data["text"])
+        #pp = pprint.PrettyPrinter(indent=4)
+        #pp.pprint(tweet)
+        #data['sentiment'] = tweet
 
         # output sentiment polarity
-        print(tweet.sentiment.polarity)
+        #print(tweet.sentiment.polarity)
 
         # determine if sentiment is positive, negative, or neutral
         if tweet.sentiment.polarity < 0:
-            sentiment = "negative"
+            data['sentiment'] = "negative"
         elif tweet.sentiment.polarity == 0:
-            sentiment = "neutral"
+            data['sentiment'] = "neutral"
         else:
-            sentiment = "positive"
+            data['sentiment'] = "positive"
+
+        data['polarity'] = tweet.sentiment.polarity
+        data['subjectivity'] = tweet.sentiment.subjectivity
 
         # output sentiment
-        print(sentiment)
+        #print(sentiment)
 
-        # add text and sentiment info to elasticsearch
-        es.index(index="sentiment",
-                 doc_type="test-type",
-                 body={"author": dict_data["user"]["screen_name"],
-                       "date": dict_data["created_at"],
-                       "message": dict_data["text"],
-                       "polarity": tweet.sentiment.polarity,
-                       "subjectivity": tweet.sentiment.subjectivity,
-                       "sentiment": sentiment})
+        try:
+            # add text and sentiment info to elasticsearch
+            es.index(index="tweets-allkeys",
+                     doc_type="tweet",
+                     body=data)
+        except Exception as e:
+            logging.warning('\nException: ' + str(e) + '\n' + str(data))
+
         return True
 
-    # on failure
-    def on_error(self, status):
-        print(status)
+    # Problem with the API
+    def on_error(self, status_code, data):
+        print(status_code, data)
 
 
-if __name__ == '__main__':
+with open("twitter_credentials.json", "r") as file:
+    creds = json.load(file)
+    
+stream = MyStreamer(creds['CONSUMER_KEY'], creds['CONSUMER_SECRET'],
+                    creds['ACCESS_TOKEN'], creds['ACCESS_SECRET'])
 
-    # create instance of the tweepy tweet stream listener
-    listener = TweetStreamListener()
-
-    # set twitter keys/tokens
-    auth = OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_token, access_token_secret)
-
-    # create instance of the tweepy stream
-    stream = Stream(auth, listener)
-
-    # search twitter for "congress" keyword
-    stream.filter(track=['congress'])
+# Start the stream
+stream.statuses.filter(track=['midterms', '2018midterms', 'midtermelections'])    
